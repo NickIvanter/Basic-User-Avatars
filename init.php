@@ -462,25 +462,20 @@ class basic_user_avatars {
 	}
 
 	/**
-	 * File names are magic
+	 * Since we put our avatars into a dedicated directory, we don't need anything fancy for the filenames.
+	 * Using the numeric user ID as the base name.
 	 *
 	 * @since 1.0.0
+	 *
 	 * @param string $dir
 	 * @param string $name
 	 * @param string $ext
+	 *
 	 * @return string
 	 */
 	public function unique_filename_callback( $dir, $name, $ext ) {
-		$user = get_user_by( 'id', (int) $this->user_id_being_edited );
-		$name = $base_name = sanitize_file_name( $user->display_name . '_avatar' );
-		$number = 1;
 
-		while ( file_exists( $dir . "/$name$ext" ) ) {
-			$name = $base_name . '_' . $number;
-			$number++;
-		}
-
-		return $name . $ext;
+		return sanitize_file_name( $this->user_id_being_edited . $ext );
 	}
 }
 $basic_user_avatars = new basic_user_avatars;
