@@ -64,7 +64,7 @@ class basic_user_avatars {
 		add_action( 'edit_user_profile',         array( $this, 'edit_user_profile'        )        );
 		add_action( 'personal_options_update',   array( $this, 'edit_user_profile_update' )        );
 		add_action( 'edit_user_profile_update',  array( $this, 'edit_user_profile_update' )        );
-		add_action( 'bbp_user_edit_after_about', array( $this, 'bbpress_user_profile'     )        );
+		add_action( 'bbp_user_edit_after_name',  array( $this, 'bbpress_user_profile'     )        );
 
 		// Shortcode
 		add_shortcode( 'basic-user-avatars',     array( $this, 'shortcode'                )        );
