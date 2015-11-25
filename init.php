@@ -284,8 +284,18 @@ class basic_user_avatars {
 				wp_die( 'For security reasons, the extension ".php" cannot be in your file name.' );
 
 			// Make user_id known to unique_filename_callback function
-			$this->user_id_being_edited = $user_id; 
-			$avatar = wp_handle_upload( $_FILES['basic-user-avatar'], array( 'mimes' => $mimes, 'test_form' => false, 'unique_filename_callback' => array( $this, 'unique_filename_callback' ) ) );
+			$this->user_id_being_edited = $user_id;
+
+			add_filter( 'upload_dir', array( $this, 'avatar_upload_dir' ) );
+			$avatar = wp_handle_upload( $_FILES['basic-user-avatar'], array(
+				'mimes'                    => $mimes,
+				'test_form'                => false,
+				'unique_filename_callback' => array(
+					$this,
+					'unique_filename_callback'
+				)
+			) );
+			remove_filter( 'upload_dir', array( $this, 'avatar_upload_dir' ) );
 
 			// Handle failures
 			if ( empty( $avatar['file'] ) ) {  
@@ -306,6 +316,15 @@ class basic_user_avatars {
 			// Nuke the current avatar
 			$this->avatar_delete( $user_id );
 		}
+	}
+
+	function avatar_upload_dir( $upload ) {
+
+		$upload['subdir'] = '/avatars';
+		$upload['path']   = $upload['basedir'] . $upload['subdir'];
+		$upload['url']    = $upload['baseurl'] . $upload['subdir'];
+
+		return $upload;
 	}
 
 	/**
